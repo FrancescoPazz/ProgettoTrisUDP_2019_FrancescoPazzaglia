@@ -219,15 +219,37 @@ namespace Progetto_TRIS_WPF
             string messaggio = "Sicuro di voler chiudere la connessione?\n\rSuccessivamente non potrai più connetterti allo stesso indirizzo IP";
             if (cont == -1)
                 messaggio = "Sicuro di voler tornare al menu?";
-            if (MessageBox.Show(messaggio, "ATTENZIONE", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (connesso)
             {
-                fineConnessione = true;
-                if (IPAddress.TryParse(txtInserimentoIP.Text, out IPAddress s) && int.TryParse(txtInserimentoPorta.Text, out int n))
+                if (MessageBox.Show(messaggio, "ATTENZIONE", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    SocketSend(IPAddress.Parse(txtInserimentoIP.Text), int.Parse(txtInserimentoPorta.Text), "TRMN");
-                    //connessione.Shutdown(SocketShutdown.Both);
-                    //connessione.Close();
+                    fineConnessione = true;
+                    if (IPAddress.TryParse(txtInserimentoIP.Text, out IPAddress s) && int.TryParse(txtInserimentoPorta.Text, out int n))
+                    {
+                        SocketSend(IPAddress.Parse(txtInserimentoIP.Text), int.Parse(txtInserimentoPorta.Text), "TRMN");
+                        //connessione.Shutdown(SocketShutdown.Both);
+                        //connessione.Close();
+                    }
+                    txtInserimentoIP.Text = "Inserire IP dell'altro giocatore";
+                    txtInserimentoIP.FontSize = 17;
+                    txtInserimentoPorta.Text = "Inserire la porta dell'altro giocatore";
+                    txtInserimentoPorta.FontSize = 17;
+                    ScomparsaGriglia();
+                    SvuotaGriglia();
+                    ScomparsaMod1();
+                    AbilitaGriglia();
+                    txtTurni.Text = "";
+                    RendiVisibileMenu();
+                    pareggio = false;
+                    btnCreaSocket.IsEnabled = false;
+                    btnOKMod1.IsEnabled = false;
+                    tbkAttesa.Text = string.Empty;
+                    connesso = false;
+                    cont = -1;
                 }
+            }
+            else
+            {
                 txtInserimentoIP.Text = "Inserire IP dell'altro giocatore";
                 txtInserimentoIP.FontSize = 17;
                 txtInserimentoPorta.Text = "Inserire la porta dell'altro giocatore";
@@ -242,6 +264,7 @@ namespace Progetto_TRIS_WPF
                 btnCreaSocket.IsEnabled = false;
                 btnOKMod1.IsEnabled = false;
                 tbkAttesa.Text = string.Empty;
+                connesso = false;
                 cont = -1;
             }
         }
@@ -658,6 +681,7 @@ namespace Progetto_TRIS_WPF
                 txtTurni.Text = "";
                 RendiVisibileMenu();
                 pareggio = false;
+                connesso = false;
                 btnCreaSocket.IsEnabled = false;
                 btnOKMod1.IsEnabled = false;
             }
